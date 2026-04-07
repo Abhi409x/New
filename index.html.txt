@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Riya ❤️</title>
+
+<style>
+body{
+  margin:0;
+  overflow:hidden;
+  font-family:sans-serif;
+  background:black;
+  color:white;
+  text-align:center;
+}
+
+/* STARS */
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation:twinkle 2s infinite alternate;
+}
+@keyframes twinkle{
+  from{opacity:0.2}
+  to{opacity:1}
+}
+
+/* CENTER */
+.center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+}
+
+/* INTRO TEXT */
+#intro{
+  font-size:60px;
+  text-shadow:0 0 20px pink,0 0 40px red;
+  animation: glow 2s infinite alternate;
+}
+@keyframes glow{
+  from{opacity:0.5}
+  to{opacity:1}
+}
+
+/* COUNT */
+#count{
+  font-size:80px;
+  display:none;
+}
+
+/* MAIN */
+#main{
+  display:none;
+}
+
+/* ANIMATED TITLE */
+#title{
+  font-size:35px;
+  margin-bottom:10px;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+  100%{transform:scale(1)}
+}
+
+/* IMAGE */
+img{
+  width:260px;
+  border-radius:20px;
+  box-shadow:0 0 30px pink;
+}
+
+/* TEXT */
+#text{
+  margin-top:20px;
+  font-size:20px;
+}
+
+/* BUTTON */
+.btn{
+  padding:10px 20px;
+  background:red;
+  border:none;
+  border-radius:25px;
+  color:white;
+  margin-top:20px;
+}
+
+/* FIREWORK */
+.firework{
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  animation:explode 1s ease-out forwards;
+}
+@keyframes explode{
+  0%{transform:scale(1)}
+  100%{transform:scale(15);opacity:0}
+}
+
+/* BALLOON */
+.balloon{
+  position:absolute;
+  bottom:-100px;
+  width:40px;
+  height:60px;
+  border-radius:50%;
+  animation:rise 6s infinite;
+}
+@keyframes rise{
+  0%{bottom:-100px}
+  100%{bottom:110%}
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro" class="center">Riya ❤️</div>
+
+<!-- COUNT -->
+<div id="count" class="center">3</div>
+
+<!-- MAIN -->
+<div id="main" class="center">
+  <div id="title">🎂 Happy Birthday Riya ❤️</div>
+
+  <img src="riya.jpg" alt="Riya Photo">
+
+  <div id="text"></div>
+
+  <button class="btn" onclick="nextLetter()">❤️ Next</button>
+</div>
+
+<!-- MUSIC -->
+<audio id="song" src="music.mp3"></audio>
+
+<script>
+
+// STARS
+for(let i=0;i<100;i++){
+  let s=document.createElement("div");
+  s.className="star";
+  s.style.top=Math.random()*100+"%";
+  s.style.left=Math.random()*100+"%";
+  document.body.appendChild(s);
+}
+
+// INTRO → COUNTDOWN
+setTimeout(()=>{
+  document.getElementById("intro").style.display="none";
+  startCount();
+},2000);
+
+// COUNTDOWN
+let c=3;
+function startCount(){
+  let el=document.getElementById("count");
+  el.style.display="block";
+
+  let i=setInterval(()=>{
+    el.innerHTML=c;
+    c--;
+    if(c<0){
+      clearInterval(i);
+      el.innerHTML="🎉";
+      setTimeout(()=>{
+        el.style.display="none";
+        startMain();
+      },1000);
+    }
+  },1000);
+}
+
+// MAIN START
+function startMain(){
+  document.getElementById("main").style.display="block";
+
+  // Music (user click required)
+  document.body.addEventListener("click",()=>{
+    document.getElementById("song").play();
+  },{once:true});
+
+  balloons();
+  fireworksLoop();
+  typeText(messages[0]);
+}
+
+// FIREWORKS
+function firework(){
+  for(let i=0;i<20;i++){
+    let f=document.createElement("div");
+    f.className="firework";
+    f.style.background=`hsl(${Math.random()*360},100%,60%)`;
+    f.style.left=50+"%";
+    f.style.top=50+"%";
+    f.style.transform=`translate(-50%,-50%) rotate(${i*18}deg) translate(0,50px)`;
+    document.body.appendChild(f);
+
+    setTimeout(()=>f.remove(),1000);
+  }
+}
+
+function fireworksLoop(){
+  setInterval(firework,2000);
+}
+
+// BALLOONS
+function balloons(){
+  for(let i=0;i<15;i++){
+    let b=document.createElement("div");
+    b.className="balloon";
+    b.style.left=Math.random()*100+"%";
+    b.style.background=`hsl(${Math.random()*360},70%,60%)`;
+    document.body.appendChild(b);
+  }
+}
+
+// TEXT TYPE
+function typeText(msg){
+  let el=document.getElementById("text");
+  el.innerHTML="";
+  let i=0;
+  let t=setInterval(()=>{
+    el.innerHTML+=msg[i];
+    i++;
+    if(i>=msg.length) clearInterval(t);
+  },40);
+}
+
+// MESSAGES
+let index=0;
+let messages=[
+"Dear Riya 💖, aap meri life me bohot special ho. Happy Birthday!",
+"Aap apni health ka dhyan rakho 🌸, kyuki aap bohot important ho.",
+"Aap life me bohot success pao 🚀, mai hamesha aapki respect karta hu."
+];
+
+function nextLetter(){
+  index++;
+  if(index<messages.length){
+    typeText(messages[index]);
+  }
+}
+
+</script>
+
+</body>
+</html>
